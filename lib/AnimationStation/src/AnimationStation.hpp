@@ -19,11 +19,11 @@
 
 typedef enum
 {
-  EFFECT_STATIC_COLOR,
-  EFFECT_RAINBOW,
-  EFFECT_CHASE,
-  EFFECT_STATIC_THEME,
-  EFFECT_CUSTOM_THEME,
+  EFFECT_STATIC_COLOR,      /* 静态颜色 */
+  EFFECT_RAINBOW,           /* 渐变 */
+  EFFECT_CHASE,             /* 追逐 */
+  EFFECT_STATIC_THEME,      /* 静态主题-五彩斑斓 */
+  EFFECT_CUSTOM_THEME,      /* 用户自定义主题 */
 } AnimationEffects;
 
 const int TOTAL_EFFECTS = 4; // Exclude custom theme until verified present
@@ -98,8 +98,9 @@ class AnimationStation
 public:
   AnimationStation();
 
-  void Animate();
+  void Animate(int need_button);
   void HandleEvent(AnimationHotkey action);
+  void myLedHandleEvent(AnimationHotkey action);
   void Clear();
   void ChangeAnimation(int changeSize);
   void ApplyBrightness(uint32_t *frameValue);
@@ -123,9 +124,12 @@ public:
   Animation* buttonAnimation;
   std::vector<Pixel> lastPressed;
   static AnimationOptions options;
-  static absolute_time_t nextChange;
+  absolute_time_t nextChange;
   static uint8_t effectCount;
   RGB frame[100];
+
+  AnimationOptions myledoptions;
+  void myledSetOptions(AnimationOptions options);
 
 protected:
   inline static uint8_t getBrightnessStepSize() { return (brightnessMax / brightnessSteps); }

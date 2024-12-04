@@ -15,7 +15,7 @@ typedef enum
 class NeoPico
 {
 public:
-  NeoPico(int ledPin, int numPixels, LEDFormat format = LED_FORMAT_GRB);
+  NeoPico(PIO _pio, int sm, int ledPin, int numPixels, LEDFormat format = LED_FORMAT_GRB);
   void Show();
   void Clear();
   void Off();
@@ -26,6 +26,7 @@ private:
   void PutPixel(uint32_t pixel_grb);
   LEDFormat format;
   PIO pio = pio0;
+  int sm = 0;
   int numPixels = 0;
   uint32_t frame[100];
 };

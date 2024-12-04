@@ -32,12 +32,19 @@
 #define GPIO_PIN_20 GpioAction::BUTTON_PRESS_A1     // A1     | Guide  | Home    | PS       | 13     | ~      |
 #define GPIO_PIN_21 GpioAction::BUTTON_PRESS_A2     // A2     | ~      | Capture | ~        | 14     | ~      |
 
+#define GPIO_PIN_27 GpioAction::BUTTON_PRESS_UP
+#define GPIO_PIN_01 GpioAction::BUTTON_PRESS_L1
+#define GPIO_PIN_26 GpioAction::BUTTON_PRESS_L3
+#define GPIO_PIN_00 GpioAction::BUTTON_PRESS_R3
+
+#if 0
 // Setting GPIO pins to assigned by add-on
 //
 #define GPIO_PIN_00 GpioAction::ASSIGNED_TO_ADDON
 #define GPIO_PIN_01 GpioAction::ASSIGNED_TO_ADDON
 #define GPIO_PIN_15 GpioAction::ASSIGNED_TO_ADDON
 #define GPIO_PIN_28 GpioAction::ASSIGNED_TO_ADDON
+#endif
 
 // Keyboard Mapping Configuration
 //                                            // GP2040 | Xinput | Switch  | PS3/4/5  | Dinput | Arcade |
@@ -61,37 +68,43 @@
 #define KEY_BUTTON_A2   HID_KEY_F2            // A2     | ~      | Capture | ~        | 14     | ~      |
 #define KEY_BUTTON_FN   -1                    // Hotkey Function                                        |
 
-#define TURBO_ENABLED 1
+#if 0
+#define TURBO_ENABLED 0
 #define GPIO_PIN_14 GpioAction::BUTTON_PRESS_TURBO
 #define TURBO_LED_PIN 15
+#endif
 
-#define BOARD_LEDS_PIN 28
+#define MY_BOARD_LEDS_PIN 28
+
+#define BOARD_LEDS_PIN 22
 #define LED_BRIGHTNESS_MAXIMUM 100
 #define LED_BRIGHTNESS_STEPS 5
 #define LED_FORMAT LED_FORMAT_GRB
-#define LEDS_PER_PIXEL 1
+#define LEDS_PER_PIXEL 2
 
-#define LEDS_DPAD_LEFT   0
-#define LEDS_DPAD_DOWN   1
-#define LEDS_DPAD_RIGHT  2
-#define LEDS_DPAD_UP     3
-#define LEDS_BUTTON_B3   4
-#define LEDS_BUTTON_B4   5
-#define LEDS_BUTTON_R1   6
+#define LEDS_BUTTON_R3   0
+#define LEDS_BUTTON_A2   1
+#define LEDS_BUTTON_A1   2
+#define LEDS_BUTTON_B1   3
+#define LEDS_BUTTON_B2   4
+#define LEDS_BUTTON_R2   5
+#define LEDS_BUTTON_L2   6
 #define LEDS_BUTTON_L1   7
-#define LEDS_BUTTON_B1   8
-#define LEDS_BUTTON_B2   9
-#define LEDS_BUTTON_R2   10
-#define LEDS_BUTTON_L2   11
-#define LEDS_BUTTON_A1   12
-#define LEDS_BUTTON_L3   13
-#define LEDS_BUTTON_R3   14
-#define LEDS_BUTTON_A2   15
+#define LEDS_BUTTON_R1   8
+#define LEDS_BUTTON_B4   9
+#define LEDS_BUTTON_B3   10
+#define LEDS_DPAD_RIGHT  11
+#define LEDS_DPAD_DOWN   12
+#define LEDS_DPAD_LEFT   13
+#define LEDS_DPAD_UP     14
+#define LEDS_BUTTON_L3   15
 
-#define HAS_I2C_DISPLAY 1
+#if 0
+#define HAS_I2C_DISPLAY 0
 #define I2C0_ENABLED 1
 #define I2C0_PIN_SDA 0
 #define I2C0_PIN_SCL 1
+#endif
 #define BUTTON_LAYOUT BUTTON_LAYOUT_STICKLESS
 #define BUTTON_LAYOUT_RIGHT BUTTON_LAYOUT_STICKLESSB
 

@@ -288,6 +288,8 @@ message LEDOptions
     optional int32 pledIndex2 = 33;
     optional int32 pledIndex3 = 34;
     optional int32 pledIndex4 = 35;
+    
+    optional int32 myleddataPin = 36;
 };
 
 // This has to be kept in sync with AnimationOptions in AnimationStation.hpp

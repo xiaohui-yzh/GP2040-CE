@@ -10,7 +10,6 @@
 uint8_t AnimationStation::brightnessMax = 100;
 uint8_t AnimationStation::brightnessSteps = 5;
 float AnimationStation::brightnessX = 0;
-absolute_time_t AnimationStation::nextChange = nil_time;
 AnimationOptions AnimationStation::options = {};
 uint8_t AnimationStation::effectCount = TOTAL_EFFECTS;
 
@@ -25,10 +24,10 @@ void AnimationStation::ConfigureBrightness(uint8_t max, uint8_t steps) {
 }
 
 void AnimationStation::HandleEvent(AnimationHotkey action) {
-  if (action == HOTKEY_LEDS_NONE || !time_reached(AnimationStation::nextChange)) {
+  if (action == HOTKEY_LEDS_NONE || !time_reached(this->nextChange)) {
     return;
   }
-  AnimationStation::nextChange = make_timeout_time_ms(250);
+  this->nextChange = make_timeout_time_ms(250);
 
   if (action == HOTKEY_LEDS_BRIGHTNESS_UP) {
     AnimationStation::IncreaseBrightness();
@@ -77,12 +76,57 @@ void AnimationStation::HandleEvent(AnimationHotkey action) {
   
 }
 
+void AnimationStation::myLedHandleEvent(AnimationHotkey action) {
+  if (action == HOTKEY_LEDS_NONE || !time_reached(this->nextChange)) {
+    return;
+  }
+  this->nextChange = make_timeout_time_ms(250);
+
+  if (action == HOTKEY_LEDS_ANIMATION_UP) {
+    ChangeAnimation(1);
+  }
+
+  if (action == HOTKEY_LEDS_ANIMATION_DOWN) {
+    ChangeAnimation(-1);
+  }
+
+
+  if (this->baseAnimation == nullptr || this->buttonAnimation == nullptr) {
+    return;
+  }
+
+  if (action == HOTKEY_LEDS_PARAMETER_UP) {
+    this->baseAnimation->ParameterUp();
+  }
+
+  if (action == HOTKEY_LEDS_PARAMETER_DOWN) {
+    this->baseAnimation->ParameterDown();
+  }
+
+  if (action == HOTKEY_LEDS_PRESS_PARAMETER_UP) {
+    this->buttonAnimation->ParameterUp();
+  }
+
+  if (action == HOTKEY_LEDS_PRESS_PARAMETER_DOWN) {
+    this->buttonAnimation->ParameterDown();
+  }
+
+  if (action == HOTKEY_LEDS_FADETIME_UP) {
+    this->baseAnimation->FadeTimeUp();
+  }
+
+  if (action == HOTKEY_LEDS_FADETIME_DOWN) {
+    this->baseAnimation->FadeTimeDown();
+  }
+
+}
+
 void AnimationStation::ChangeAnimation(int changeSize) {
   this->SetMode(this->AdjustIndex(changeSize));
 }
 
 uint16_t AnimationStation::AdjustIndex(int changeSize) {
-  int newIndex = (int)this->options.baseAnimationIndex + changeSize;
+  int newIndex = (int)this->myledoptions.baseAnimationIndex + changeSize;
 
   if (newIndex >= AnimationStation::effectCount) {
     return 0;
@@ -112,14 +156,16 @@ void AnimationStation::ClearPressed() {
   this->lastPressed.clear();
 }
 
-void AnimationStation::Animate() {
+void AnimationStation::Animate(int need_button) {
   if (baseAnimation == nullptr || buttonAnimation == nullptr) {
     this->Clear();
     return;
   }
 
   baseAnimation->Animate(this->frame);
-  buttonAnimation->Animate(this->frame);
+  if (need_button) {
+      buttonAnimation->Animate(this->frame);
+  }
 }
 
 void AnimationStation::Clear() { memset(frame, 0, sizeof(frame)); }
@@ -132,12 +178,13 @@ uint8_t AnimationStation::GetBrightness() {
   return AnimationStation::options.brightness;
 }
 
-uint8_t AnimationStation::GetMode() { return this->options.baseAnimationIndex; }
+uint8_t AnimationStation::GetMode() { return this->myledoptions.baseAnimationIndex; }
 
 void AnimationStation::SetMode(uint8_t mode) {
   this->options.baseAnimationIndex = mode;
+  this->myledoptions.baseAnimationIndex = mode;
   AnimationEffects newEffect =
-      static_cast<AnimationEffects>(this->options.baseAnimationIndex);
+      static_cast<AnimationEffects>(this->myledoptions.baseAnimationIndex);
 
   if (this->baseAnimation != nullptr) {
     delete this->baseAnimation;
@@ -179,6 +226,10 @@ void AnimationStation::SetMatrix(PixelMatrix matrix) {
 void AnimationStation::SetOptions(AnimationOptions options) {
   AnimationStation::options = options;
   AnimationStation::SetBrightness(options.brightness);
+}
+
+void AnimationStation::myledSetOptions(AnimationOptions options) {
+  this->myledoptions = options;
 }
 
 void AnimationStation::ApplyBrightness(uint32_t *frameValue) {

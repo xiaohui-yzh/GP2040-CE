@@ -180,6 +180,9 @@ public:
 	virtual std::string name() { return NeoPicoLEDName; }
 	void configureLEDs();
 	uint32_t frame[100];
+
+	void myconfigureLEDs();
+	uint32_t myframe[100];
 private:
 	std::vector<uint8_t> * getLEDPositions(std::string button, std::vector<std::vector<uint8_t>> *positions);
 	std::vector<std::vector<Pixel>> generatedLEDButtons(std::vector<std::vector<uint8_t>> *positions);
@@ -192,13 +195,21 @@ private:
 	absolute_time_t nextRunTime;
 	uint8_t ledCount;
 	PixelMatrix matrix;
-	NeoPico *neopico;
+	NeoPico *neopico = NULL;
 	InputMode inputMode; // HACK
 	PLEDAnimationState animationState; // NeoPico can control the player LEDs
 	NeoPicoPlayerLEDs * neoPLEDs = nullptr;
 	AnimationStation as;
 	std::map<std::string, int> buttonPositions;
 	bool turnOffWhenSuspended;
+
+	std::vector<uint8_t> * mygetLEDPositions(std::string button, std::vector<std::vector<uint8_t>> *positions);
+	uint8_t mysetupButtonPositions();
+	std::vector<std::vector<Pixel>> mycreateLEDLayout(uint8_t ledsPerPixel, uint8_t ledButtonCount);
+	PixelMatrix mymatrix;
+	NeoPico *myneopico = NULL;
+	AnimationStation myas;
+	std::map<std::string, int> mybuttonPositions;
 };
 
 #endif
